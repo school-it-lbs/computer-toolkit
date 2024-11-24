@@ -174,3 +174,93 @@ __Hinweis:__ Die Zeichnung muss nicht abgeschlossen werden. Es wird die Fläche 
 3. Optional (Schwierig): Zeichne einen Stern
     - Die Winkel bei einen Stern mit fünf Zacken sind 72 Grad, bzw 144 Grad beim Rotieren
     - Nur die Spitzen werden gefüllt wenn sich die Linien überkreuzen
+
+
+## Import und Klassen
+
+### Import
+
+Wie bereits am Anfang beschrieben erlaubt `import` das einbinden von Modulen, wie z.B. `turtle`.  
+Wir können auch eigene Module definieren und einbinden.
+
+> siehe Ordner: __06_sprites.py__
+
+Hier haben wir ein Module `block_sprite` das wir in `main.py` einbinden.  
+Danach können wir auf die Klasse `BlockSprite` zugreifen. 
+
+```python
+import block_sprite
+b1 = block_sprite.BlockSprite(10, 20)
+```
+
+### Klassen
+
+Mit Klassen können wir Logik und Funktionen, die zusammengehören, bündeln.  
+
+```python
+class MyClassExample:
+    def __init__(self, n):
+        self.name = n
+
+    def sayHello(self):
+        print(name)
+```
+
+| Keyword | Kommentar |
+|-|-|
+| `class` | Definition der Klasse |
+| `__init__` | "Konstruktor" Spezial-Funktion. Hier werden initiale Werte gesetzt |
+| `self` | Verweist auf die "Instanz", d.h. das Objekt das erstellt wurde. Muss als erstes Parameter angegeben werden |
+
+`sayHello` is eine Funktion der Klasse `MyClassExample`.  
+`name` ist ein Attribut der Klasse. 
+
+
+```python
+# Instanz erzeugen, hier mit Parameter n = Bob
+# Variable kann beliebig lauten, hier "m"
+m = MyClassExample("Bob")
+# Aufruf der Funktion der Klasse
+m.sayHello()
+# ("Optional") Löscht Instanz
+del m
+```
+
+> siehe auch Demo: __demo9_class__
+
+
+### Aufgabe 5
+
+1. Erstelle eine neue Sprite-Klasse `TriangeSprint` in der Datei `triangle_sprite`. Die Funktion `draw` soll ein rotes Dreieck zeichnen
+2. Ergänze im Konstruktor ein Parameter um die Farbe vom Dreieck zu setzen
+
+
+## Tastatureingabe
+
+Turtle bietet die Möglichkeit auf Tastatureingaben zu reagieren.
+
+```python
+window = turtle.Screen()
+
+def aFunctionName():
+    print("left was pressed")
+
+# Registriert das die Funktion "aFunctionName" aufgerufen wird, wenn die Taste Keyboard-Links gedrückt wird
+window.onkeypress(aFunctionName, "Left")
+
+# aktiviert die Tastatureingabe
+window.listen()
+```
+
+Wenn wir die Position von Objekten in Variablen speichern können wir sie bewegen.  
+Dafür muss jedoch eine Schleife verwendet werden, um die Ansicht regelmäßig zu aktualisieren.
+
+> siehe Skript: __07_move.py__
+
+Mit den Cursor-Tasten kann der Kreis bewegt werden.  
+Eigentlich wird dabei der Kreis immer wieder neu gezeichnet. Die Startposition vom Turtle wird durch die Tastatureingabe verändert.
+
+### Aufgabe 6
+
+1. Ändere die Farbe vom Kreis (z.B. zu blau) wenn die Taste "c" gedrückt wird
+2. Optional (Schwierig): Ersetzte den Kreis mit einer eigenen Form

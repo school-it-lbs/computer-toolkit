@@ -50,7 +50,7 @@ class Game:
 
     def spawn_enemies(self):
         if time.time() - self.enemy_timer > self.ALIEN_SPAWN_INTERVAL:
-            if(random.randint(0, 10) >= 9):
+            if(random.randint(0, 10) >= 8):
                 enemy = sprite_module.Ufo(self.dimensions)
             else:
                 enemy = sprite_module.Alien(self.dimensions)            
@@ -58,11 +58,17 @@ class Game:
             self.enemy_timer = time.time()
         
         for enemy in self.enemy_array:
+            # Remove enemies off screen       
+            if((enemy.sprite.xcor() < self.dimensions.left + self.dimensions.gutter) or (enemy.sprite.xcor() > self.dimensions.right - + self.dimensions.gutter)):
+                self.remove_sprite(enemy, self.enemy_array)
+                continue
+
             enemy.move()
             # Check for game over
             if enemy.sprite.ycor() < self.dimensions.floor:
                 self.game_running = False
-                break  
+                break
+            
                
     
     def remove_sprite(self, sprite, sprite_array):

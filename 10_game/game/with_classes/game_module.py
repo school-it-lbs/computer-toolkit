@@ -50,8 +50,11 @@ class Game:
 
     def spawn_enemies(self):
         if time.time() - self.enemy_timer > self.ALIEN_SPAWN_INTERVAL:
-            if(random.randint(0, 10) >= 8):
+            random_enemy = random.randint(0, 10)
+            if random_enemy >= 8:
                 enemy = sprite_module.Ufo(self.dimensions)
+            elif random_enemy >= 6:
+                enemy = sprite_module.Rocket(self.dimensions)
             else:
                 enemy = sprite_module.Alien(self.dimensions)            
             self.enemy_array.append(enemy)

@@ -111,6 +111,42 @@ class Ufo:
         self.sprite.setheading(self.last_heading)        
 
 
+class Rocket:
+    ROCKET_SPEED = 4
+    KEEP_DIRECTION_IN_SEC = 0.5
+
+    def __init__(self, dimensions):
+        self.sprite = turtle.Turtle()
+        self.dimensions = dimensions
+        self.heading = [-45, -67.5, -90, -112.5, -135]
+        self.timer = time.time()
+        self.last_heading = self.heading[2]        
+        self.draw()
+
+    def draw(self):
+        self.sprite.penup()
+        self.sprite.pensize(2)
+        self.sprite.color(random.random(), random.random(), random.random())        
+        self.sprite.setposition(
+            random.randint(
+                int(self.dimensions.left - self.dimensions.gutter),
+                int(self.dimensions.right + self.dimensions.gutter),
+            ),
+            self.dimensions.top,
+        )
+        self.sprite.pendown()
+        self.sprite.shape("classic")
+        
+    def move(self):
+        self.sprite.forward(self.ROCKET_SPEED)
+        now = time.time()        
+        if(now - self.timer > self.KEEP_DIRECTION_IN_SEC):
+            self.timer = now
+            self.last_heading = self.heading[random.randint(0, 4)]
+        self.sprite.setheading(self.last_heading)     
+     
+
+
 class Cannon:
     CANNON_STEP = 10
 

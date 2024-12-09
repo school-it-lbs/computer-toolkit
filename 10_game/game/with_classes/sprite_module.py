@@ -21,6 +21,22 @@ class Enemy:
             )
 
 
+class WobblyEnemy(Enemy):
+    def __init__(self, dimensions, speed, direction_array, keep_direction_timer):
+        Enemy.__init__(self, dimensions, speed)
+        self.heading = direction_array
+        self.timer = time.time()
+        self.last_heading = self.heading[1]
+        self.keep_direction_timer = keep_direction_timer
+
+    def wobble(self):        
+        now = time.time()        
+        if now - self.timer > self.keep_direction_timer:
+            self.timer = now
+            self.last_heading = self.heading[random.randint(0, len(self.heading) - 1)]
+        self.sprite.setheading(self.last_heading)   
+
+
 class Alien(Enemy):
     def __init__(self, dimensions):
         Enemy.__init__(self, dimensions, 3.5)
@@ -39,14 +55,10 @@ class Alien(Enemy):
         self.sprite.forward(self.speed)
      
      
-class Ufo(Enemy):
-    KEEP_DIRECTION_IN_SEC = 1
-
+class Ufo(WobblyEnemy):
     def __init__(self, dimensions):
-        Enemy.__init__(self, dimensions, 5)
-        self.heading = [-45, -90, -135]
-        self.timer = time.time()
-        self.last_heading = self.heading[1]
+        direction_array = [-45, -90, -135]
+        WobblyEnemy.__init__(self, dimensions, 5, direction_array, 1)
         self.sprite.pensize(2)
         self.set_random_color()
         self.sprite.hideturtle()
@@ -75,21 +87,13 @@ class Ufo(Enemy):
     def move(self):
         self.sprite.forward(self.speed)
         self.draw()
-        now = time.time()        
-        if(now - self.timer > self.KEEP_DIRECTION_IN_SEC):
-            self.timer = now
-            self.last_heading = self.heading[random.randint(0, 2)]
-        self.sprite.setheading(self.last_heading)        
+        self.wobble()       
 
 
-class Rocket(Enemy):
-    KEEP_DIRECTION_IN_SEC = 0.5
-
+class Rocket(WobblyEnemy):
     def __init__(self, dimensions):
-        Enemy.__init__(self, dimensions, 4)
-        self.heading = [-45, -67.5, -90, -112.5, -135]
-        self.timer = time.time()
-        self.last_heading = self.heading[2]        
+        direction_array = [-45, -67.5, -90, -112.5, -135]
+        WobblyEnemy.__init__(self, dimensions, 4, direction_array, 0.5)        
         self.draw()
 
     def draw(self):
@@ -102,11 +106,7 @@ class Rocket(Enemy):
         
     def move(self):
         self.sprite.forward(self.speed)
-        now = time.time()        
-        if(now - self.timer > self.KEEP_DIRECTION_IN_SEC):
-            self.timer = now
-            self.last_heading = self.heading[random.randint(0, 4)]
-        self.sprite.setheading(self.last_heading)     
+        self.wobble()   
 
 
 class Laser:

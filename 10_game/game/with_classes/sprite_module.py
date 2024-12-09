@@ -2,17 +2,111 @@ import turtle
 import random
 import time
 
-def set_random_color(sprite):
-    sprite.color(random.random(), random.random(), random.random())
+class Enemy:
+    def __init__(self, dimensions, speed):
+        self.sprite = turtle.Turtle()
+        self.dimensions = dimensions
+        self.speed = speed
 
-def set_random_position(sprite, dimensions):
-    sprite.setposition(
-            random.randint(
-                int(dimensions.left + dimensions.gutter),
-                int(dimensions.right - dimensions.gutter),
-            ),
-            dimensions.top,
-        )
+    def set_random_color(self):
+        self.sprite.color(random.random(), random.random(), random.random())
+
+    def set_random_position(self):
+        self.sprite.setposition(
+                random.randint(
+                    int(self.dimensions.left + self.dimensions.gutter),
+                    int(self.dimensions.right - self.dimensions.gutter),
+                ),
+                self.dimensions.top,
+            )
+
+
+class Alien(Enemy):
+    def __init__(self, dimensions):
+        Enemy.__init__(self, dimensions, 3.5)
+        self.draw()
+
+    def draw(self):
+        self.sprite.penup()
+        self.sprite.turtlesize(1.5)
+        self.set_random_position()
+        self.sprite.shape("circle")
+        
+        self.sprite.setheading(-90)
+        self.set_random_color()
+
+    def move(self):
+        self.sprite.forward(self.speed)
+     
+     
+class Ufo(Enemy):
+    KEEP_DIRECTION_IN_SEC = 1
+
+    def __init__(self, dimensions):
+        Enemy.__init__(self, dimensions, 5)
+        self.heading = [-45, -90, -135]
+        self.timer = time.time()
+        self.last_heading = self.heading[1]
+        self.sprite.pensize(2)
+        self.set_random_color()
+        self.sprite.hideturtle()
+        self.set_random_position()
+
+    def draw(self):
+        self.sprite.clear()
+        self.sprite.forward(-8)
+        self.sprite.dot(10)
+        self.sprite.forward(8)
+        self.sprite.setheading(0)
+        self.sprite.pendown()
+        self.sprite.circle(20)
+        self.sprite.penup()
+        self.sprite.forward(10)
+        self.sprite.left(90)
+        self.sprite.forward(20)
+        self.sprite.pendown()
+        self.sprite.circle(10)
+        self.sprite.penup()
+        self.sprite.forward(-20)
+        self.sprite.left(-90)
+        self.sprite.forward(-10)
+        self.sprite.setheading(self.last_heading) 
+        
+    def move(self):
+        self.sprite.forward(self.speed)
+        self.draw()
+        now = time.time()        
+        if(now - self.timer > self.KEEP_DIRECTION_IN_SEC):
+            self.timer = now
+            self.last_heading = self.heading[random.randint(0, 2)]
+        self.sprite.setheading(self.last_heading)        
+
+
+class Rocket(Enemy):
+    KEEP_DIRECTION_IN_SEC = 0.5
+
+    def __init__(self, dimensions):
+        Enemy.__init__(self, dimensions, 4)
+        self.heading = [-45, -67.5, -90, -112.5, -135]
+        self.timer = time.time()
+        self.last_heading = self.heading[2]        
+        self.draw()
+
+    def draw(self):
+        self.sprite.penup()
+        self.sprite.pensize(2)
+        self.set_random_color()        
+        self.set_random_position()
+        self.sprite.pendown()
+        self.sprite.shape("classic")
+        
+    def move(self):
+        self.sprite.forward(self.speed)
+        now = time.time()        
+        if(now - self.timer > self.KEEP_DIRECTION_IN_SEC):
+            self.timer = now
+            self.last_heading = self.heading[random.randint(0, 4)]
+        self.sprite.setheading(self.last_heading)     
 
 
 class Laser:
@@ -43,102 +137,7 @@ class Laser:
         self.sprite.forward(self.LASER_SPEED)
         # Draw the laser
         self.sprite.forward(self.LASER_LENGTH)
-        self.sprite.forward(-self.LASER_LENGTH)
-
-class Alien:
-    ALIEN_SPEED = 3.5
-
-    def __init__(self, dimensions):
-        self.sprite = turtle.Turtle()
-        self.dimensions = dimensions
-        self.draw()
-
-    def draw(self):
-        self.sprite.penup()
-        self.sprite.turtlesize(1.5)
-        set_random_position(self.sprite, self.dimensions)
-        self.sprite.shape("circle")
-        
-        self.sprite.setheading(-90)
-        set_random_color(self.sprite)
-
-    def move(self):
-        self.sprite.forward(self.ALIEN_SPEED)
-     
-     
-class Ufo:
-    UFO_SPEED = 5
-    KEEP_DIRECTION_IN_SEC = 1
-
-    def __init__(self, dimensions):
-        self.sprite = turtle.Turtle()
-        self.dimensions = dimensions
-        self.heading = [-45, -90, -135]
-        self.timer = time.time()
-        self.last_heading = self.heading[1]
-        self.sprite.pensize(2)
-        set_random_color(self.sprite)
-        self.sprite.hideturtle()
-        set_random_position(self.sprite, self.dimensions)
-
-    def draw(self):
-        self.sprite.clear()
-        self.sprite.forward(-8)
-        self.sprite.dot(10)
-        self.sprite.forward(8)
-        self.sprite.setheading(0)
-        self.sprite.pendown()
-        self.sprite.circle(20)
-        self.sprite.penup()
-        self.sprite.forward(10)
-        self.sprite.left(90)
-        self.sprite.forward(20)
-        self.sprite.pendown()
-        self.sprite.circle(10)
-        self.sprite.penup()
-        self.sprite.forward(-20)
-        self.sprite.left(-90)
-        self.sprite.forward(-10)
-        self.sprite.setheading(self.last_heading) 
-        
-    def move(self):
-        self.sprite.forward(self.UFO_SPEED)
-        self.draw()
-        now = time.time()        
-        if(now - self.timer > self.KEEP_DIRECTION_IN_SEC):
-            self.timer = now
-            self.last_heading = self.heading[random.randint(0, 2)]
-        self.sprite.setheading(self.last_heading)        
-
-
-class Rocket:
-    ROCKET_SPEED = 4
-    KEEP_DIRECTION_IN_SEC = 0.5
-
-    def __init__(self, dimensions):
-        self.sprite = turtle.Turtle()
-        self.dimensions = dimensions
-        self.heading = [-45, -67.5, -90, -112.5, -135]
-        self.timer = time.time()
-        self.last_heading = self.heading[2]        
-        self.draw()
-
-    def draw(self):
-        self.sprite.penup()
-        self.sprite.pensize(2)
-        set_random_color(self.sprite)        
-        set_random_position(self.sprite, self.dimensions)
-        self.sprite.pendown()
-        self.sprite.shape("classic")
-        
-    def move(self):
-        self.sprite.forward(self.ROCKET_SPEED)
-        now = time.time()        
-        if(now - self.timer > self.KEEP_DIRECTION_IN_SEC):
-            self.timer = now
-            self.last_heading = self.heading[random.randint(0, 4)]
-        self.sprite.setheading(self.last_heading)     
-     
+        self.sprite.forward(-self.LASER_LENGTH)     
 
 
 class Cannon:

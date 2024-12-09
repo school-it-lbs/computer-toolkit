@@ -1,5 +1,6 @@
 import turtle
 import random
+import time
 
 class Laser:
     LASER_LENGTH = 20
@@ -57,6 +58,41 @@ class Alien:
 
     def move(self):
         self.sprite.forward(self.ALIEN_SPEED)
+     
+     
+class Ufo:
+    UFO_SPEED = 5
+    KEEP_DIRECTION_IN_SEC = 1
+
+    def __init__(self, dimensions):
+        self.sprite = turtle.Turtle()
+        self.dimensions = dimensions
+        self.heading = [-45, -90, -135]
+        self.timer = time.time()
+        self.last_heading = self.heading[1]
+        self.draw()
+
+    def draw(self):
+        self.sprite.penup()
+        self.sprite.turtlesize(1.5)
+        self.sprite.setposition(
+            random.randint(
+                int(self.dimensions.left - self.dimensions.gutter),
+                int(self.dimensions.right + self.dimensions.gutter),
+            ),
+            self.dimensions.top,
+        )
+        self.sprite.shape("square")
+        
+        self.sprite.color(random.random(), random.random(), random.random())
+
+    def move(self):
+        self.sprite.forward(self.UFO_SPEED)
+        now = time.time()        
+        if(now - self.timer > self.KEEP_DIRECTION_IN_SEC):
+            self.timer = now
+            self.last_heading = self.heading[random.randint(0, 2)]                 
+        self.sprite.setheading(self.last_heading)        
 
 
 class Cannon:

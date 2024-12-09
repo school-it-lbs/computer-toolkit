@@ -1,5 +1,6 @@
 import time
 import turtle
+import random
 import sprite_module
 import text_module
 
@@ -49,8 +50,11 @@ class Game:
 
     def spawn_enemies(self):
         if time.time() - self.enemy_timer > self.ALIEN_SPAWN_INTERVAL:
-            alien = sprite_module.Alien(self.dimensions)
-            self.enemy_array.append(alien)
+            if(random.randint(0, 10) >= 9):
+                enemy = sprite_module.Ufo(self.dimensions)
+            else:
+                enemy = sprite_module.Alien(self.dimensions)            
+            self.enemy_array.append(enemy)
             self.enemy_timer = time.time()
         
         for enemy in self.enemy_array:

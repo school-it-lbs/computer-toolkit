@@ -51,7 +51,7 @@ class Alien:
             ),
             self.dimensions.top,
         )
-        self.sprite.shape("turtle")
+        self.sprite.shape("circle")
         
         self.sprite.setheading(-90)
         self.sprite.color(random.random(), random.random(), random.random())
@@ -70,11 +70,9 @@ class Ufo:
         self.heading = [-45, -90, -135]
         self.timer = time.time()
         self.last_heading = self.heading[1]
-        self.draw()
-
-    def draw(self):
-        self.sprite.penup()
-        self.sprite.turtlesize(1.5)
+        self.sprite.pensize(2)
+        self.sprite.color(random.random(), random.random(), random.random())
+        self.sprite.hideturtle()
         self.sprite.setposition(
             random.randint(
                 int(self.dimensions.left - self.dimensions.gutter),
@@ -82,16 +80,34 @@ class Ufo:
             ),
             self.dimensions.top,
         )
-        self.sprite.shape("square")
-        
-        self.sprite.color(random.random(), random.random(), random.random())
 
+    def draw(self):
+        self.sprite.clear()
+        self.sprite.forward(-8)
+        self.sprite.dot(10)
+        self.sprite.forward(8)
+        self.sprite.setheading(0)
+        self.sprite.pendown()
+        self.sprite.circle(20)
+        self.sprite.penup()
+        self.sprite.forward(10)
+        self.sprite.left(90)
+        self.sprite.forward(20)
+        self.sprite.pendown()
+        self.sprite.circle(10)
+        self.sprite.penup()
+        self.sprite.forward(-20)
+        self.sprite.left(-90)
+        self.sprite.forward(-10)
+        self.sprite.setheading(self.last_heading) 
+        
     def move(self):
         self.sprite.forward(self.UFO_SPEED)
+        self.draw()
         now = time.time()        
         if(now - self.timer > self.KEEP_DIRECTION_IN_SEC):
             self.timer = now
-            self.last_heading = self.heading[random.randint(0, 2)]                 
+            self.last_heading = self.heading[random.randint(0, 2)]
         self.sprite.setheading(self.last_heading)        
 
 

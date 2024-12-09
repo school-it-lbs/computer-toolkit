@@ -2,6 +2,19 @@ import turtle
 import random
 import time
 
+def set_random_color(sprite):
+    sprite.color(random.random(), random.random(), random.random())
+
+def set_random_position(sprite, dimensions):
+    sprite.setposition(
+            random.randint(
+                int(dimensions.left + dimensions.gutter),
+                int(dimensions.right - dimensions.gutter),
+            ),
+            dimensions.top,
+        )
+
+
 class Laser:
     LASER_LENGTH = 20
     LASER_SPEED = 20
@@ -32,7 +45,6 @@ class Laser:
         self.sprite.forward(self.LASER_LENGTH)
         self.sprite.forward(-self.LASER_LENGTH)
 
-
 class Alien:
     ALIEN_SPEED = 3.5
 
@@ -44,17 +56,11 @@ class Alien:
     def draw(self):
         self.sprite.penup()
         self.sprite.turtlesize(1.5)
-        self.sprite.setposition(
-            random.randint(
-                int(self.dimensions.left + self.dimensions.gutter),
-                int(self.dimensions.right - self.dimensions.gutter),
-            ),
-            self.dimensions.top,
-        )
+        set_random_position(self.sprite, self.dimensions)
         self.sprite.shape("circle")
         
         self.sprite.setheading(-90)
-        self.sprite.color(random.random(), random.random(), random.random())
+        set_random_color(self.sprite)
 
     def move(self):
         self.sprite.forward(self.ALIEN_SPEED)
@@ -71,15 +77,9 @@ class Ufo:
         self.timer = time.time()
         self.last_heading = self.heading[1]
         self.sprite.pensize(2)
-        self.sprite.color(random.random(), random.random(), random.random())
+        set_random_color(self.sprite)
         self.sprite.hideturtle()
-        self.sprite.setposition(
-            random.randint(
-                int(self.dimensions.left - self.dimensions.gutter),
-                int(self.dimensions.right + self.dimensions.gutter),
-            ),
-            self.dimensions.top,
-        )
+        set_random_position(self.sprite, self.dimensions)
 
     def draw(self):
         self.sprite.clear()
@@ -126,14 +126,8 @@ class Rocket:
     def draw(self):
         self.sprite.penup()
         self.sprite.pensize(2)
-        self.sprite.color(random.random(), random.random(), random.random())        
-        self.sprite.setposition(
-            random.randint(
-                int(self.dimensions.left - self.dimensions.gutter),
-                int(self.dimensions.right + self.dimensions.gutter),
-            ),
-            self.dimensions.top,
-        )
+        set_random_color(self.sprite)        
+        set_random_position(self.sprite, self.dimensions)
         self.sprite.pendown()
         self.sprite.shape("classic")
         
